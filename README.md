@@ -1,5 +1,5 @@
 Description:
-
+In this project, we use the arrest data from NYC OpenData. And we will analysis the arrests record to see how these arrests affect the city and explore the arrest frequency, properties and so on.
 
 link to the book URL: [edavgroup.github.io/ArrestData/](https://edavgroup.github.io/ArrestData/)
 
