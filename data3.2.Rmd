@@ -1,0 +1,15 @@
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(RSocrata)
+library(ggplot2)
+library(tidyverse)
+```
+
+```{r}
+data =  read.socrata("https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc")
+```
+
+```{r}
+head(data)
+```
+
