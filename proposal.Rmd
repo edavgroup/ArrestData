@@ -13,3 +13,5 @@ The dataset is categorized as public safety and contains 141,000 observations wi
 Meanwhile, we will also compare the current year's arrest information with the past to get the changes in the crime rate in New York City in recent years. We obtain the historic data from the same platform New York OpenData  (https://data.cityofnewyork.us/Public-Safety/NYPD-Arrests-Data-Historic-/8h9b-rp9u). This dataset has the same format as year-to-date data, making it easy to compare with each other. The historic dataset is last updated on June 9, 2022.
 
 We can export these two datasets in CSV format for offline use from New York OpenData. Then we can import and manipulate the CSV formatted data in R from the local path.
+
+try1
