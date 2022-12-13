@@ -14,4 +14,3 @@ Meanwhile, we will also compare the current year's arrest information with the p
 
 We can export these two datasets in CSV format for offline use from New York OpenData. Then we can import and manipulate the CSV formatted data in R from the local path.
 
-try1
