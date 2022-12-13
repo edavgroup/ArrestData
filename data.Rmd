@@ -1,6 +1,13 @@
 # Data 
 
 ## Sources
+After deciding the topic of the project, all of our team members searched data together to find the most suitable one. We have found that, to identify the crime types, patterns and so on, we need to get some historical crime data. Also, the data released by government or other official department would be more reliable. Here we extract the arrest records data from New York OpenData (https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc), which is a free public data source published by New York City agencies and other organizations. The data we will use is collected by the New York Police Department(NYPD), including information about the type of crime, the location, the demographics of perpetrators, and so on. The Office of Management Analysis and Planning extracts and reviews the data every quarter. The data is last updated on Oct 19, 2022. 
+
+The dataset is categorized as public safety and contains 141,000 observations with 19 columns in a structured form. Each row represents an arrest effected in New York City by NYPD. The column shows the basic information about the arrest, including the time, location, and level of offense. At the same time, the dataset also contains descriptions of perpetrators, such as gender, age, race, etc. Based on these data, we can well accomplish our research goals.
+
+To fully explored the arrest pattern, a single dataset is not reliable. Therefore, we collected historic data for arrests records from the same platform, New York OpenData,  (https://data.cityofnewyork.us/Public-Safety/NYPD-Arrests-Data-Historic-/8h9b-rp9u). This dataset has the same format as year-to-date data, making it easy to compare with each other. However, we found that this historic dataset was only updated on June 9, 2022 lastly, which has been covered by our primal dataset. Therefore, instead of using both datasets, we use only the primal one in our projects.
+
+We can export the dataset in CSV format for offline use from New York OpenData. Then we can import and manipulate the CSV formatted data in R from the local path.
 
 ## Cleaning / transformation
 
