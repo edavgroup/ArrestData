@@ -13,3 +13,13 @@ data =  read.socrata("https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Da
 head(data)
 ```
 
+```{r}
+data = data %>% select(-c(geocoded_column))
+```
+
+We drop the column called 'geocoded_column', since this column is a combination of longitude coordinate as x coordiante and latitude cooridnate as y coordinate.
+
+```{r}
+
+```
+
