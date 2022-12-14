@@ -1,5 +1,5 @@
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 library(RSocrata)
 library(ggplot2)
 library(tidyverse)
@@ -10,6 +10,10 @@ data =  read.socrata("https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Da
 ```
 
 ```{r}
+glimpse(data)
+```
+
+```{r}
 head(data)
 ```
 
@@ -17,9 +21,10 @@ head(data)
 data = data %>% select(-c(geocoded_column))
 ```
 
-We drop the column called 'geocoded_column', since this column is a combination of longitude coordinate as x coordiante and latitude cooridnate as y coordinate.
+We drop the column called 'geocoded_column', since this column is a combination of longitude coordinate as x coordinate and latitude coordinate as y coordinate.
 
 ```{r}
-
+table(data %>% select(c(age_group)))
 ```
 
+We notice that the age groups are not classified evenly. However, the number of arrests with age group of '18-24' is extremely large comparing to other age groups. It is worth noticing and explicitly indicating that in plots. Therefore, we keep the categories of age unchanged.
