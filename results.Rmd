@@ -19,7 +19,7 @@ library(ggalluvial)
 
 We start to analyze the crime pattern with plotting the criminals.
 
-With the arrest records, we plot the basic information (age, gender and race) for all arrestees. Then we could depicting the portraits for those criminal group.
+With the arrest records, we plot the basic information (age, gender and race) for all arrests. Then we could depicting the portraits for those criminal group.
 
 
 ```{r}
