@@ -15,9 +15,57 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 
 ```{r}
-library(tidyverse)
+library(dplyr)
+library(tibble)
+library(tidyr)
+library(ggplot2)
+library(forcats)
+library(RSocrata)
+library(redav)
+library(UpSetR)
+library(naniar)
 ```
 
 
-、
+```{r}
+data =  read.socrata("https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc")
+```
+
+```{r}
+head(data)
+```
+
+## Missing value analysis
+
+### Why analyse missing value?
+
+In this section, we want to know the distribution of missing values in the original dataset. Through missing pattern analysis, we are able to get an overview of the missing logic and determine how to deal with these missing values. Whether to delete them directly or to approach them based on other non-missing values?
+
+### Missing pattern
+
+We start by analysis the missing pattern of the whole dataset.
+
+```{r}
+data["pd_desc"][data["pd_desc"] == "(null)"] <- NA
+gg_miss_upset(data, nsets = 19)
+
+```
+
+The left-bottom bar chart shows the total number of missing values in each column. The right chart shows the intersection pattern of the missing value. From the chart above, we can find that among 19 column in original data set, only 3 columns (pd_cd, pd_desc, ky_cd) has missing value. 
+
+    - pd_cd: Three digit arrest internal classification code.
+    - pd_desc: The description of internal classification code
+    - ky_cd: Three digit internal classification code (more general category than PD code)
+    
+Notice the relation among pd_cd, pd_desc and ky_cd, it is easy to understand the consistency of missing value. Since the Keycode is a more general category, if the Key code of an arrest event is unknown, the PD code also remains unknown. Similarly, if the PD code is unkown, we cannot describe it. 
+
+```{r}
+
+
+
+```
+
+
+
+
 
