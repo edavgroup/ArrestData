@@ -1,6 +1,6 @@
 ---
-title: "GR5702 Fall 2022 Problem Set 1"
-author: "YIJIA HE, JUNYUAN HUANG"
+title: "missing pattern"
+author: "JUNYUAN HUANG"
 output:
   html_document:
     fig_width: 5
@@ -33,6 +33,7 @@ data =  read.socrata("https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Da
 
 ```{r}
 head(data)
+str(data)
 ```
 
 ## Missing value analysis
@@ -47,24 +48,39 @@ We start by analysis the missing pattern of the whole dataset.
 
 ```{r}
 data["pd_desc"][data["pd_desc"] == "(null)"] <- NA
+data["ofns_desc"][data["ofns_desc"] == "(null)"] <- NA
 gg_miss_upset(data, nsets = 19)
 
 ```
 
-The left-bottom bar chart shows the total number of missing values in each column. The right chart shows the intersection pattern of the missing value. From the chart above, we can find that among 19 column in original data set, only 3 columns (pd_cd, pd_desc, ky_cd) has missing value. 
+The left-bottom bar chart shows the total number of missing values in each column. The right chart shows the intersection pattern of the missing value. From the chart above, we can find that among 19 column in original data set, only 4 columns (pd_cd, pd_desc, ky_cd) has missing value. 
 
     - pd_cd: Three digit arrest internal classification code.
     - pd_desc: The description of internal classification code
     - ky_cd: Three digit internal classification code (more general category than PD code)
+    - ofns_desc: Description of Key code
     
-Notice the relation among pd_cd, pd_desc and ky_cd, it is easy to understand the consistency of missing value. Since the Keycode is a more general category, if the Key code of an arrest event is unknown, the PD code also remains unknown. Similarly, if the PD code is unkown, we cannot describe it. 
+Notice the relation among pd_cd, pd_desc, ky_cd and ofns_desc, it is easy to understand the consistency of missing value. Since the Keycode is a more general category, if the Key code of an arrest event is unknown, the PD code also remains unknown. Similarly, if the PD code is unkown, we cannot describe it. 
+
+
+### Missing borough analysis:
+
 
 ```{r}
+missing_data <- data
+missing_data["arrest_boro"][missing_data["arrest_boro"] == "Q"] <- "Queens"
+missing_data["arrest_boro"][missing_data["arrest_boro"] == "B"] <- "Bronx"
+missing_data["arrest_boro"][missing_data["arrest_boro"] == "S"] <- "Staten Island"
+missing_data["arrest_boro"][missing_data["arrest_boro"] == "K"] <- "Brooklyn"
+missing_data["arrest_boro"][missing_data["arrest_boro"] == "M"] <- "Manhattan"
 
-
+gg_miss_var(missing_data,
+            facet = arrest_boro
+            ) +
+  labs(x = "Column", title = "Missing values in different region")+
+  theme_bw()
 
 ```
-
 
 
 
