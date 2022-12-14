@@ -13,6 +13,7 @@ library(UpSetR)
 library(naniar)
 library(rvest)
 library(ggpubr)
+library(ggalluvial)
 ```
 
 
@@ -60,3 +61,21 @@ From the above 3 figures, we can observe the following characteristics of the ca
 2. The age group shows an approximate natural distribution pattern, mainly concentrated in 25-44 years old.
 3. Black and White Hispanic mainly.
 Such data can help police better understand the psychology of criminal groups.
+
+
+So there is another question: What is the connection between these crime figures and the specific types of crime correspondingly?
+
+Here we made an alluvial diagram to show that.
+
+```{r}
+ggplot(data,aes( axis1 = age_group, axis2 = perp_sex, axis3 = perp_race, axis4 = ofns_desc)) +
+  geom_alluvium(aes(fill = ofns_desc), width = 1/12) +
+  geom_stratum(width = 1/12, fill = "grey80", color = "grey") +
+  geom_label(stat = "stratum", 
+             aes(label = after_stat(stratum))) +
+  scale_x_discrete(expand = c(.05, .05)) +
+  scale_fill_brewer(type = "qual", palette = "Set1") +
+  ggtitle("Crime types") +
+  theme_void()
+```
+
