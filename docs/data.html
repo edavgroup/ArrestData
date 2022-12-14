@@ -82,7 +82,11 @@
 <ul>
 <li class="chapter" data-level="3.1" data-path="data.html"><a href="data.html#sources"><i class="fa fa-check"></i><b>3.1</b> Sources</a></li>
 <li class="chapter" data-level="3.2" data-path="data.html"><a href="data.html#cleaning-transformation"><i class="fa fa-check"></i><b>3.2</b> Cleaning / transformation</a></li>
-<li class="chapter" data-level="3.3" data-path="data.html"><a href="data.html#missing-value-analysis"><i class="fa fa-check"></i><b>3.3</b> Missing value analysis</a></li>
+<li class="chapter" data-level="3.3" data-path="data.html"><a href="data.html#missing-value-analysis"><i class="fa fa-check"></i><b>3.3</b> Missing value analysis</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="data.html"><a href="data.html#why-analyse-missing-value"><i class="fa fa-check"></i><b>3.3.1</b> Why analyse missing value?</a></li>
+<li class="chapter" data-level="3.3.2" data-path="data.html"><a href="data.html#missing-pattern"><i class="fa fa-check"></i><b>3.3.2</b> Missing pattern</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>4</b> Results</a></li>
 <li class="chapter" data-level="5" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>5</b> Interactive component</a></li>
@@ -155,6 +159,12 @@
 </div>
 <div id="missing-value-analysis" class="section level2 hasAnchor" number="3.3">
 <h2><span class="header-section-number">3.3</span> Missing value analysis<a href="data.html#missing-value-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="why-analyse-missing-value" class="section level3 hasAnchor" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Why analyse missing value?<a href="data.html#why-analyse-missing-value" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In this section, we want to know the distribution of missing values in the original dataset. Through missing pattern analysis, we are able to get an overview of the missing logic and determine how to deal with these missing values. Whether to delete them directly or to approach them based on other non-missing values?</p>
+</div>
+<div id="missing-pattern" class="section level3 hasAnchor" number="3.3.2">
+<h3><span class="header-section-number">3.3.2</span> Missing pattern<a href="data.html#missing-pattern" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We start by analysis the missing pattern of the whole dataset.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p>The left-bottom bar chart shows the total number of missing values in each column. The right chart shows the intersection pattern of the missing value. From the chart above, we can find that among 19 column in original data set, only 3 columns (pd_cd, pd_desc, ky_cd) has missing value.</p>
@@ -163,6 +173,7 @@
 - ky_cd: Three digit internal classification code (more general category than PD code)</code></pre>
 <p>Notice the relation among pd_cd, pd_desc and ky_cd, it is easy to understand the consistency of missing value. Since the Keycode is a more general category, if the Key code of an arrest event is unknown, the PD code also remains unknown. Similarly, if the PD code is unkown, we cannot describe it.</p>
 
+</div>
 </div>
 </div>
             </section>

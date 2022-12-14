@@ -46,6 +46,12 @@ head(data)
 
 ## Missing value analysis
 
+### Why analyse missing value?
+
+In this section, we want to know the distribution of missing values in the original dataset. Through missing pattern analysis, we are able to get an overview of the missing logic and determine how to deal with these missing values. Whether to delete them directly or to approach them based on other non-missing values?
+
+### Missing pattern
+
 We start by analysis the missing pattern of the whole dataset.
 
 ```{r}
