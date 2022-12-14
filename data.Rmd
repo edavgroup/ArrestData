@@ -1,4 +1,28 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Data 
+
+```{r setup, include=FALSE}
+# this prevents package loading message from appearing in the rendered version of your problem set
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+
+```{r}
+library(dplyr)
+library(tibble)
+library(tidyr)
+library(ggplot2)
+library(forcats)
+library(RSocrata)
+library(redav)
+library(UpSetR)
+library(naniar)
+```
+
 
 ## Sources
 After deciding the topic of the project, all of our team members searched data together to find the most suitable one. We have found that, to identify the crime types, patterns and so on, we need to get some historical crime data. Also, the data released by government or other official department would be more reliable. Here we extract the arrest records data from New York OpenData (https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc), which is a free public data source published by New York City agencies and other organizations. The data we will use is collected by the New York Police Department(NYPD), including information about the type of crime, the location, the demographics of perpetrators, and so on. The Office of Management Analysis and Planning extracts and reviews the data every quarter. The data is last updated on Oct 19, 2022. 
@@ -11,5 +35,30 @@ We can export the dataset in CSV format for offline use from New York OpenData. 
 
 ## Cleaning / transformation
 
+```{r}
+data =  read.socrata("https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc")
+```
+
+```{r}
+head(data)
+```
+
+
 ## Missing value analysis
+
+We start by analysis the missing pattern of the whole dataset.
+
+```{r}
+data["pd_desc"][data["pd_desc"] == "(null)"] <- NA
+gg_miss_upset(data, nsets = 19)
+
+```
+
+The left-bottom bar chart shows the total number of missing values in each column. The right chart shows the intersection pattern of the missing value. From the chart above, we can find that among 19 column in original data set, only 3 columns (pd_cd, pd_desc, ky_cd) has missing value. 
+
+    - pd_cd: Three digit arrest internal classification code.
+    - pd_desc: The description of internal classification code
+    - ky_cd: Three digit internal classification code (more general category than PD code)
+    
+Notice the relation among pd_cd, pd_desc and ky_cd, it is easy to understand the consistency of missing value. Since the Keycode is a more general category, if the Key code of an arrest event is unknown, the PD code also remains unknown. Similarly, if the PD code is unkown, we cannot describe it. 
 

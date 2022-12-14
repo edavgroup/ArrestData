@@ -23,7 +23,7 @@
 <meta name="author" content="Lingjun Zhang, Yijia He, Junyuan Huang" />
 
 
-<meta name="date" content="2022-11-01" />
+<meta name="date" content="2022-12-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -110,12 +110,58 @@
 <h1><span class="header-section-number">Chapter 3</span> Data<a href="data.html#data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="sources" class="section level2 hasAnchor" number="3.1">
 <h2><span class="header-section-number">3.1</span> Sources<a href="data.html#sources" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>After deciding the topic of the project, all of our team members searched data together to find the most suitable one. We have found that, to identify the crime types, patterns and so on, we need to get some historical crime data. Also, the data released by government or other official department would be more reliable. Here we extract the arrest records data from New York OpenData (<a href="https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc" class="uri">https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc</a>), which is a free public data source published by New York City agencies and other organizations. The data we will use is collected by the New York Police Department(NYPD), including information about the type of crime, the location, the demographics of perpetrators, and so on. The Office of Management Analysis and Planning extracts and reviews the data every quarter. The data is last updated on Oct 19, 2022.</p>
+<p>The dataset is categorized as public safety and contains 141,000 observations with 19 columns in a structured form. Each row represents an arrest effected in New York City by NYPD. The column shows the basic information about the arrest, including the time, location, and level of offense. At the same time, the dataset also contains descriptions of perpetrators, such as gender, age, race, etc. Based on these data, we can well accomplish our research goals.</p>
+<p>To fully explored the arrest pattern, a single dataset is not reliable. Therefore, we collected historic data for arrests records from the same platform, New York OpenData, (<a href="https://data.cityofnewyork.us/Public-Safety/NYPD-Arrests-Data-Historic-/8h9b-rp9u" class="uri">https://data.cityofnewyork.us/Public-Safety/NYPD-Arrests-Data-Historic-/8h9b-rp9u</a>). This dataset has the same format as year-to-date data, making it easy to compare with each other. However, we found that this historic dataset was only updated on June 9, 2022 lastly, which has been covered by our primal dataset. Therefore, instead of using both datasets, we use only the primal one in our projects.</p>
+<p>We can export the dataset in CSV format for offline use from New York OpenData. Then we can import and manipulate the CSV formatted data in R from the local path.</p>
 </div>
 <div id="cleaning-transformation" class="section level2 hasAnchor" number="3.2">
 <h2><span class="header-section-number">3.2</span> Cleaning / transformation<a href="data.html#cleaning-transformation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre><code>##   arrest_key arrest_date pd_cd                        pd_desc ky_cd
+## 1  238492853  2022-01-01   258 CRIMINAL MISCHIEF 4TH, GRAFFIT   351
+## 2  238496466  2022-01-01   244  BURGLARY,UNCLASSIFIED,UNKNOWN   107
+## 3  238498340  2022-01-01   792     CRIMINAL POSSESSION WEAPON   118
+## 4  238513835  2022-01-01   109       ASSAULT 2,1,UNCLASSIFIED   106
+## 5  238513876  2022-01-01   112  MENACING 1ST DEGREE (VICT NOT   126
+## 6  238513883  2022-01-01   339 LARCENY,PETIT FROM OPEN AREAS,   341
+##                        ofns_desc   law_code law_cat_cd arrest_boro
+## 1 CRIMINAL MISCHIEF &amp; RELATED OF PL 1456002          M           K
+## 2                       BURGLARY PL 1402000          F           M
+## 3              DANGEROUS WEAPONS PL 265031B          F           Q
+## 4                 FELONY ASSAULT PL 1200501          F           B
+## 5        MISCELLANEOUS PENAL LAW PL 1201800          F           K
+## 6                  PETIT LARCENY PL 1552500          M           K
+##   arrest_precinct jurisdiction_code age_group perp_sex      perp_race
+## 1              72                 1     18-24        M          WHITE
+## 2              23                 0     25-44        F          WHITE
+## 3             114                 0     18-24        M          BLACK
+## 4              47                 2     25-44        M          BLACK
+## 5              71                97     25-44        M BLACK HISPANIC
+## 6              60                 0     25-44        M          BLACK
+##   x_coord_cd y_coord_cd latitude longitude
+## 1     984074     178984 40.65795 -74.00063
+## 2     997744     228061 40.79264 -73.95127
+## 3    1010642     218253 40.76569 -73.90472
+## 4    1026480     262584 40.88731 -73.84727
+## 5    1000099     178227 40.65586 -73.94288
+## 6     985372     147958 40.57279 -73.99596
+##                              geocoded_column
+## 1               POINT (-74.000634 40.657949)
+## 2               POINT (-73.951265 40.792642)
+## 3               POINT (-73.904725 40.765692)
+## 4 POINT (-73.8472717577564 40.8873136344706)
+## 5               POINT (-73.942878 40.655857)
+## 6           POINT (-73.99596126 40.57278637)</code></pre>
 </div>
 <div id="missing-value-analysis" class="section level2 hasAnchor" number="3.3">
 <h2><span class="header-section-number">3.3</span> Missing value analysis<a href="data.html#missing-value-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We start by analysis the missing pattern of the whole dataset.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>The left-bottom bar chart shows the total number of missing values in each column. The right chart shows the intersection pattern of the missing value. From the chart above, we can find that among 19 column in original data set, only 3 columns (pd_cd, pd_desc, ky_cd) has missing value.</p>
+<pre><code>- pd_cd: Three digit arrest internal classification code.
+- pd_desc: The description of internal classification code
+- ky_cd: Three digit internal classification code (more general category than PD code)</code></pre>
+<p>Notice the relation among pd_cd, pd_desc and ky_cd, it is easy to understand the consistency of missing value. Since the Keycode is a more general category, if the Key code of an arrest event is unknown, the PD code also remains unknown. Similarly, if the PD code is unkown, we cannot describe it.</p>
 
 </div>
 </div>
