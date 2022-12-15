@@ -17,6 +17,7 @@ library(ggalluvial)
 library(RColorBrewer)
 ```
 
+## Criminals' portrait
 
 We start to analyze the crime pattern with plotting the criminals' portrait.
 
@@ -29,18 +30,18 @@ data <- data %>%
   drop_na(pd_desc, ky_cd, pd_cd)
 
 figure1 <- ggplot(data, aes(x=age_group))+ 
-  geom_histogram(stat="count",position="identity", alpha=0.5)+
+  geom_histogram(stat="count",position="identity", alpha=0.5, fill = "lightBlue")+
   coord_flip()+
   labs(caption="Figure.1 Age Distribution of the Criminals", 
        x="age", y="count")+ 
-  theme_minimal()
+  theme(axis.text.y=element_text(size=8), axis.text.x=element_text(size=8))
 
 figure2 <- ggplot(data, aes(x=perp_sex))+ 
-  geom_histogram(stat="count",position="identity", alpha=0.5)+
+  geom_histogram(stat="count",position="identity", alpha=0.5,fill = "lightBlue")+
   coord_flip()+
   labs(caption="Figure.2 Sex Distribution of the Criminals", 
        x="sex", y="count")+ 
-  theme_minimal()
+  theme(axis.text.y=element_text(size=8), axis.text.x=element_text(size=8))
 
 ggarrange(figure1, figure2, ncol = 2, nrow = 1)
 ```
@@ -48,11 +49,11 @@ ggarrange(figure1, figure2, ncol = 2, nrow = 1)
 
 ```{r}
 figure3 <- ggplot(data, aes(x=perp_race))+ 
-  geom_histogram(stat="count",position="identity", alpha=0.5)+
+  geom_histogram(stat="count",position="identity", alpha=0.5,fill = "lightBlue")+
   coord_flip()+
   labs(caption="Figure.3 Race Distribution of the Criminals", 
        x="race", y="count")+ 
-  theme_minimal()
+  theme(axis.text.y=element_text(size=8), axis.text.x=element_text(size=8))
 
 figure3
 ```
@@ -66,6 +67,9 @@ Such data can help police better understand the psychology of criminal groups.
 
 So there is another question: What is the connection between these crime figures and the specific types of crime correspondingly?
 
+## Crime Types
+### Relationship between Type of Offenders and Crime Types
+
 Firstly, we calculate the frequency of all crime types as shown in table below.
 
 ```{r}
@@ -77,19 +81,25 @@ crime_category_table <- sort(crime_category_table, decreasing = TRUE)
 crime_by_category <- as.data.frame(crime_category_table, stringsAsFactors = FALSE)
 colnames(crime_by_category) <- c("Category", "Frequency")
 crime_by_category$Percentage <- crime_by_category$Frequency / sum(crime_by_category$Frequency) * 100
-crime_by_category
+crime_by_category 
 ```
+
 We can see that there are 64 types in total. To have a clear understanding of the data, we select 7 types whose percentage is higher than 5% among the total observations for the further analysis.
 
 They are [ASSAULT 3 & RELATED OFFENSES, PETIT LARCENY, FELONY ASSAULT, MISCELLANEOUS PENAL LAW, CRIMINAL MISCHIEF & RELATED OF, DANGEROUS DRUGS, ROBBERY].
 
 ```{r}
-# for bed = 2
 high_freq_crime_types <- data %>% filter((ofns_desc == "ASSAULT 3 & RELATED OFFENSES") | (ofns_desc == "PETIT LARCENY") | (ofns_desc == "FELONY ASSAULT") | (ofns_desc == "MISCELLANEOUS PENAL LAW") | (ofns_desc == "CRIMINAL MISCHIEF & RELATED OF") | (ofns_desc == "DANGEROUS DRUGS") | (ofns_desc == "ROBBERY") )
 
-high_freq_crime_types
-
+crime_by_category_plot <-ggplot(crime_by_category[1:7,], aes(x = Category, y = Frequency)) +     geom_histogram(stat="identity",alpha=0.5,fill = "lightBlue") + 
+        labs(title = 'Crime by Category',
+         x = 'Category',
+         y = 'Frequency')+
+    theme(axis.text.y=element_text(size=6), axis.text.x=element_text(size=4))
+  
+crime_by_category_plot
 ```
+
 
 Here we made an mosaic diagram to show the relationship between the criminals and the crime types.
 
@@ -97,14 +107,18 @@ Here we made an mosaic diagram to show the relationship between the criminals an
 library(ggmosaic)
 library(vcd)
 df_type <- select(high_freq_crime_types,c(age_group, perp_sex, ofns_desc))
-color= brewer.pal(7,"Blues")
+color= brewer.pal(7,"Greys")
 vcd::mosaic(ofns_desc~age_group+perp_sex,df_type,direction=c('h','v','v'),highlighting_fill=color, labeling = vcd::labeling_border(rot_labels = c(0, 0, 90, 90), abbreviate_labs = c(5, 1, 1)))
 ```
 
-Here we can see that the distribution of different crime types
+Here we can see that the distribution of different crime types is similar in different age groups and sex offenders. So there's not a strong connection between the type of crime and the type of offenders.
 
-```{r}
-ggplot(data = high_freq_crime_types) +
-   geom_mosaic(aes(x = product(perp_sex, perp_race), fill=ofns_desc), na.rm=TRUE) +  labs(x = "Crime Types ", ) + facet_grid(age_group~.)
-```
+### Relationship between Locations and Crime Types
+
+
+
+### Relationship between Time and Crime Types
+
+
+
 
