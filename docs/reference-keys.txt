@@ -9,6 +9,8 @@ cleaning-transformation
 missing-value-analysis
 why-analyse-missing-value
 missing-pattern
+missing-borough-analysis
+way-to-deal-with-the-missing-value
 results
 interactive-component
 conclusion

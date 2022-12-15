@@ -67,6 +67,8 @@ So there is another question: What is the connection between these crime figures
 
 Here we made an mosaic diagram to show that.
 
+
+
 ```{r}
 library(ggmosaic)
 library(vcd)
