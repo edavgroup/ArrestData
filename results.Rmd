@@ -71,7 +71,7 @@ From the above three figures, we can observe the following characteristics of th
 3. Black and White Hispanic mainly.
 Such data can help police better understand the psychology of criminal groups.
 
-### Crimes over sex, race and age
+### Relationship between sex, race and age
 
 ```{r}
 
@@ -98,8 +98,7 @@ ggplot(data = race_data) +
 From the mosaic plot above, we can see the age, gender, and race distribution of arrested people. Overall, males make up the vast majority of all arrests. For age, the arrest rate of 25-44 is the highest among all age groups, followed by 18-24 and 45-60. With the weakening of activity, the arrest rate also decreases. For race, black and white Hispanics are the two main arrest groups, black and white Hispanics are the two main groups of arrests, and the least arrested races are American Indian and Alaskan natives, which are categorized into "Others".
 
 
-
-So there is another question: What is the connection between these crime figures and the specific types of crime correspondingly?
+So there is another question: What is the connection between these criminals' figures and the specific types of crime correspondingly?
 
 ## Crime Types
 
@@ -149,10 +148,9 @@ Here we can see that the distribution of different crime types is similar in dif
 
 
 
-
 Based on the analysis above, we can infer that there is a certain randomness between the crime rate and crime types. Therefore, the next question would be: are there any factors that are more strongly associated with crime rate in New York?
 
-## Crimes Over different Boroughs
+## Spacial Analysis
 
 We're reminded that different parts of New York have different policing environments, different police forces, different people who live there. So we regionalized criminal records.
 
@@ -261,36 +259,9 @@ figure_boro <- ggplot(high_freq_crime_types,
 figure_boro
 ```
 
-### Crimes over sex, race and age
-
-In this section, we want to explore if there are race or age groups that dominate the arrests， helping government to better educate relevant people.
-
-```{r}
-
-race <- c("BLACK","BLACK HISPANIC", "ASIAN / PACIFIC ISLANDER","WHITE","WHITE HISPANIC","Others")
-
-race_data <- map_data
-race_data["perp_race"][race_data["perp_race"] == "AMERICAN INDIAN/ALASKAN NATIVE"] <- "Others"
-race_data["perp_race"][race_data["perp_race"] == "UNKOWN"] <- "Others"
 
 
-
-race_data$perp_race <- factor(map_data$perp_race, levels = race)
-ggplot(data = race_data) +
-  geom_mosaic(aes(x = product(perp_race, age_group), fill = perp_sex),
-              na.rm=TRUE,
-              offset = 0.03)+
-  labs(y="Race", x= "Age")+
-  theme(axis.text.x= element_text(angle=-45),
-        legend.title = element_blank())
-
-
-```
-
-From the mosaic plot above, we can see the age, gender, and race distribution of arrested people. Overall, males make up the vast majority of all arrests. For age, the arrest rate of 25-44 is the highest among all age groups, followed by 18-24 and 45-60. With the weakening of activity, the arrest rate also decreases. For race, black and white Hispanics are the two main arrest groups, black and white Hispanics are the two main groups of arrests, and the least arrested races are American Indian and Alaskan natives, which are categorized into "Others".
-
-
-## Crimes Over Time
+## Temporal Analysis
 
 
 We want to explore if there is any monthly or seasonal pattern over time by plotting the number of arrest over time. If crime is tied to activities, the period at which activities end may impact.
