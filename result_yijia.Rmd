@@ -23,11 +23,6 @@ data =  read.socrata("https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Da
 data = data %>% select(-c(geocoded_column))
 ```
 
-```{r}
-data <- data %>%
-  drop_na(pd_desc, ky_cd, pd_cd)
-#这里可能要修改一下，因为我也不知道咋处理的missing data
-```
 
 We want to investigate the number of arrest in NYC by NYPDs based on the borough of the arrest.
 
@@ -40,7 +35,7 @@ crime_by_borough_plot = ggplot(data, aes(x = fct_infreq(arrest_boro))) +
 crime_by_borough_plot
 ```
 
-We want to explore if there is any monthly or seasonal pattern over time by plotting the number of arrest over time.
+We want to explore if there is any monthly or seasonal pattern over time by plotting the number of arrest over time. If crime is tied to activities, the period at which activities end may impact.
 
 ```{r}
 df_arrest_daily <- data %>%
@@ -57,7 +52,9 @@ fig_daily_arrest <- ggplot(df_arrest_daily, aes(x = Date, y = count)) +
 fig_daily_arrest
 ```
 
-This figure shows the number of daily arrests from January 1 2022, to September 30 2022. We can see there is no strong pattern over time. Nevertheless, there is a small increasing during the beginning of 2022 and a slight decreasing around July and August. Then we will try to examine if the number of arrests has association with the day of week. We first need to derive the day of week based on the date. Also with subgroups, we can verify if there is a latent factor.
+This figure shows the number of daily arrests from January 1 2022, to September 30 2022. We can see there is no strong pattern over time. Nevertheless, there is a small increasing during the beginning of 2022 and a slight decreasing around July and August. Paying attention to January 1, 2022, which is the New Year, we can't conclude that the number of arrests happened on January 1 is higher. The graph shows that the number of crimes is not strongly related to the activities and time.
+
+Then we will try to examine if the number of arrests has association with the day of week. We first need to derive the day of week based on the date. Also with subgroups, we can verify if there is a latent factor.
 
 ```{r}
 data$dayofweek <- wday(data$arrest_date, label=TRUE, abbr=FALSE)
@@ -86,4 +83,39 @@ By plotting the heatmap of the number of arrests in NYC over time categorized by
 We also want to examine if certain types of crime may be more time dependent. For example, more traffic violations when people leave work.
 
 
+```{r}
+data = data %>%
+  mutate(month=months(as.Date(data$arrest_date)))
+```
+
+```{r}
+df_top_crimes <- data %>%
+  group_by(ofns_desc) %>% 
+  summarize(count = n()) %>%
+  arrange(desc(count))
+
+df_crime <- data %>%
+  filter(ofns_desc %in% df_top_crimes$ofns_desc[1:24]) %>%
+  group_by(ofns_desc, dayofweek, month) %>% 
+  summarize(count = n())
+
+df_crime$month <- factor(df_crime$month, levels = c('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'))
+```
+
+```{r, fig.width = 10}
+plot <- ggplot(df_crime , aes(x = month, y = dayofweek, fill = count)) +
+  geom_tile() +
+  scale_x_discrete(name = "Month" )+
+  # fte_theme() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.6, size = 4))+
+  labs(x = "Month", y = "Day of Week of Arrest", title = "Number of Arrests in NYC in 2022 by Category and Time of Arrest") +
+  scale_fill_gradient(low = "white", high = "#2980B9") +
+  facet_wrap(~ ofns_desc, nrow = 4)
+plot
+```
+
+We can see there is no strong relation among the day of week and the type of crimes, which is consistent with the general pattern. That is there are more arrests during the weekdays in general. For the crime type with the highest frequency, assault and related offenses are not time dependent and there is no certain pattern.
+
+这个可能要算到type of crime里和borough
+We also want to consider the factor by borough. 
 
