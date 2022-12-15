@@ -92,13 +92,13 @@
 </ul></li>
 <li class="chapter" data-level="4" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>4</b> Results</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="results.html"><a href="results.html#criminals-portrait"><i class="fa fa-check"></i><b>4.1</b> Criminals’ portrait</a></li>
-<li class="chapter" data-level="4.2" data-path="results.html"><a href="results.html#crime-types"><i class="fa fa-check"></i><b>4.2</b> Crime Types</a></li>
-<li class="chapter" data-level="4.3" data-path="results.html"><a href="results.html#crimes-over-different-boroughs"><i class="fa fa-check"></i><b>4.3</b> Crimes Over different Boroughs</a>
+<li class="chapter" data-level="4.1" data-path="results.html"><a href="results.html#criminals-portrait"><i class="fa fa-check"></i><b>4.1</b> Criminals’ portrait</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="results.html"><a href="results.html#arrest-data-look-on-map"><i class="fa fa-check"></i><b>4.3.1</b> Arrest data look on map</a></li>
+<li class="chapter" data-level="4.1.1" data-path="results.html"><a href="results.html#relationship-between-sex-race-and-age"><i class="fa fa-check"></i><b>4.1.1</b> Relationship between sex, race and age</a></li>
 </ul></li>
-<li class="chapter" data-level="4.4" data-path="results.html"><a href="results.html#crimes-over-time"><i class="fa fa-check"></i><b>4.4</b> Crimes Over Time</a></li>
+<li class="chapter" data-level="4.2" data-path="results.html"><a href="results.html#crime-types"><i class="fa fa-check"></i><b>4.2</b> Crime Types</a></li>
+<li class="chapter" data-level="4.3" data-path="results.html"><a href="results.html#spacial-analysis"><i class="fa fa-check"></i><b>4.3</b> Spacial Analysis</a></li>
+<li class="chapter" data-level="4.4" data-path="results.html"><a href="results.html#temporal-analysis"><i class="fa fa-check"></i><b>4.4</b> Temporal Analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>5</b> Interactive component</a></li>
 <li class="chapter" data-level="6" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>6</b> Conclusion</a></li>
@@ -127,14 +127,19 @@
 <h2><span class="header-section-number">4.1</span> Criminals’ portrait<a href="results.html#criminals-portrait" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We start to analyze the crime pattern with plotting the criminals’ portrait.</p>
 <p>With the arrest records, we plot the basic information (age, gender and race) for all arrestees. Then we could depicting the portraits for those criminal group.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p>From the above three figures, we can observe the following characteristics of the captured criminals：
 1. Men dominate.
 2. The age group shows an approximate natural distribution pattern, mainly concentrated in 25-44 years old.
 3. Black and White Hispanic mainly.
 Such data can help police better understand the psychology of criminal groups.</p>
-<p>So there is another question: What is the connection between these crime figures and the specific types of crime correspondingly?</p>
+<div id="relationship-between-sex-race-and-age" class="section level3 hasAnchor" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Relationship between sex, race and age<a href="results.html#relationship-between-sex-race-and-age" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p>From the mosaic plot above, we can see the age, gender, and race distribution of arrested people. Overall, males make up the vast majority of all arrests. For age, the arrest rate of 25-44 is the highest among all age groups, followed by 18-24 and 45-60. With the weakening of activity, the arrest rate also decreases. For race, black and white Hispanics are the two main arrest groups, black and white Hispanics are the two main groups of arrests, and the least arrested races are American Indian and Alaskan natives, which are categorized into “Others”.</p>
+<p>So there is another question: What is the connection between these criminals’ figures and the specific types of crime correspondingly?</p>
+</div>
 </div>
 <div id="crime-types" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Crime Types<a href="results.html#crime-types" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -206,30 +211,34 @@ Such data can help police better understand the psychology of criminal groups.</
 ## 64       UNLAWFUL POSS. WEAP. ON SCHOOL         1  0.0007133431</code></pre>
 <p>We can see that there are 64 types in total. To have a clear understanding of the data, we select 7 types whose percentage is higher than 5% among the total observations for the further analysis.</p>
 <p>They are [ASSAULT 3 &amp; RELATED OFFENSES, PETIT LARCENY, FELONY ASSAULT, MISCELLANEOUS PENAL LAW, CRIMINAL MISCHIEF &amp; RELATED OF, DANGEROUS DRUGS, ROBBERY].</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 <p>Here we made an mosaic diagram to show the relationship between the criminals and the crime types.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 <pre><code>## NULL</code></pre>
 <p>Here we can see that the distribution of different crime types is similar in different age groups and sex offenders. So there’s not a strong connection between the type of crime and the type of offenders.</p>
 <p>Based on the analysis above, we can infer that there is a certain randomness between the crime rate and crime types. Therefore, the next question would be: are there any factors that are more strongly associated with crime rate in New York?</p>
 </div>
-<div id="crimes-over-different-boroughs" class="section level2 hasAnchor" number="4.3">
-<h2><span class="header-section-number">4.3</span> Crimes Over different Boroughs<a href="results.html#crimes-over-different-boroughs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We’re reminded that different parts of New York have different policing environments, different police forces, different people who live there. So we regionalized criminal records.</p>
-<div id="arrest-data-look-on-map" class="section level3 hasAnchor" number="4.3.1">
-<h3><span class="header-section-number">4.3.1</span> Arrest data look on map<a href="results.html#arrest-data-look-on-map" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="spacial-analysis" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Spacial Analysis<a href="results.html#spacial-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We’re reminded that different parts of New York have different policing environments, different police forces, different people who live there.</p>
 <p>In this section, we explore the arrest distribution look on map.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
 <p>From the figure above, we can find that arrest happend in Manhattan, Bronx and Brooklyn is relatively concentrated. For Queens and Staten Island, there are places that never have an arrest during the whole year.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 <p>It turns out that the number of arrests occurred in Staten Island is the least, which is about 1/3 of that in other borough.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 </div>
-</div>
-<div id="crimes-over-time" class="section level2 hasAnchor" number="4.4">
-<h2><span class="header-section-number">4.4</span> Crimes Over Time<a href="results.html#crimes-over-time" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We want to explore if there is any pattern over time by plotting the number of arrest over time.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
-<p>This figure shows the number of daily arrests from January 1 2022, to September 30 2022. We can see there is no strong pattern over time. Nevertheless, there is a small increasing during the beginning of 2022 and a slight decreasing around July and August.</p>
+<div id="temporal-analysis" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> Temporal Analysis<a href="results.html#temporal-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We want to explore if there is any monthly or seasonal pattern over time by plotting the number of arrest over time. If crime is tied to activities, the period at which activities end may impact.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p>This figure shows the number of daily arrests from January 1 2022, to September 30 2022. We can see there is no strong pattern over time. Nevertheless, there is a small increasing during the beginning of 2022 and a slight decreasing around July and August. Paying attention to January 1, 2022, which is the New Year, we can’t conclude that the number of arrests happened on January 1 is higher. The graph shows that the number of crimes is not strongly related to the activities and time.</p>
+<p>Then we will try to examine if the number of arrests has association with the day of week. We first need to derive the day of week based on the date. Also with subgroups, we can verify if there is a latent factor.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p>By plotting the heatmap of the number of arrests in NYC over time categorized by the day of week, we can notice a pattern that there are more arrests during the weekday than during weekends, specifically on Tuesday, Wednesday and Thursday. Moreover, from the graph, we can see that in January and February, overall there are fewer arrests in NYC compared to other months.</p>
+<p>We also want to examine if certain types of crime may be more time dependent. For example, more traffic violations when people leave work.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-33-1.png" width="960" /></p>
+<p>We can see there is no strong relation among the day of week and the type of crimes, which is consistent with the general pattern. That is there are more arrests during the weekdays in general. For the crime type with the highest frequency, assault and related offenses are not time dependent and there is no certain pattern.</p>
 
 </div>
 </div>

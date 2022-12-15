@@ -12,9 +12,9 @@ missing-borough-analysis
 way-to-deal-with-the-missing-value
 results
 criminals-portrait
+relationship-between-sex-race-and-age
 crime-types
-crimes-over-different-boroughs
-arrest-data-look-on-map
-crimes-over-time
+spacial-analysis
+temporal-analysis
 interactive-component
 conclusion

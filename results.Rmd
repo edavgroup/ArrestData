@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Results
 
 
@@ -20,6 +25,8 @@ library(ggmap)
 library(tmap)
 library(scales)
 library(cowplot)
+library(ggmosaic)
+library(lubridate)
 ```
 
 ## Criminals' portrait
@@ -77,13 +84,13 @@ Such data can help police better understand the psychology of criminal groups.
 
 race <- c("BLACK","BLACK HISPANIC", "ASIAN / PACIFIC ISLANDER","WHITE","WHITE HISPANIC","Others")
 
-race_data <- map_data
+race_data <- data
 race_data["perp_race"][race_data["perp_race"] == "AMERICAN INDIAN/ALASKAN NATIVE"] <- "Others"
 race_data["perp_race"][race_data["perp_race"] == "UNKOWN"] <- "Others"
+race_data$perp_race <- factor(data$perp_race, levels = race)
+```
 
-
-
-race_data$perp_race <- factor(map_data$perp_race, levels = race)
+```{r}
 ggplot(data = race_data) +
   geom_mosaic(aes(x = product(perp_race, age_group), fill = perp_sex),
               na.rm=TRUE,
