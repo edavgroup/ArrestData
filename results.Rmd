@@ -215,6 +215,34 @@ map_data %>%
 
 It turns out that the number of arrests occurred in Staten Island is the least, which is about 1/3 of that in other borough.
 
+### Crimes over sex, race and age
+
+In this section, we want to explore if there are race or age groups that dominate the arrests， helping government to better educate relevant people.
+
+```{r}
+
+race <- c("BLACK","BLACK HISPANIC", "ASIAN / PACIFIC ISLANDER","WHITE","WHITE HISPANIC","Others")
+
+race_data <- map_data
+race_data["perp_race"][race_data["perp_race"] == "AMERICAN INDIAN/ALASKAN NATIVE"] <- "Others"
+race_data["perp_race"][race_data["perp_race"] == "UNKOWN"] <- "Others"
+
+
+
+race_data$perp_race <- factor(map_data$perp_race, levels = race)
+ggplot(data = race_data) +
+  geom_mosaic(aes(x = product(perp_race, age_group), fill = perp_sex),
+              na.rm=TRUE,
+              offset = 0.03)+
+  labs(y="Race", x= "Age")+
+  theme(axis.text.x= element_text(angle=-45),
+        legend.title = element_blank())
+
+
+```
+
+From the mosaic plot above, we can see the age, gender, and race distribution of arrested people. Overall, males make up the vast majority of all arrests. For age, the arrest rate of 25-44 is the highest among all age groups, followed by 18-24 and 45-60. With the weakening of activity, the arrest rate also decreases. For race, black and white Hispanics are the two main arrest groups, black and white Hispanics are the two main groups of arrests, and the least arrested races are American Indian and Alaskan natives, which are categorized into "Others".
+
 
 ## Crimes Over Time
 
