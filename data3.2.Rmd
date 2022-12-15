@@ -31,5 +31,3 @@ table(data %>% select(c(age_group)))
 ```
 
 In addition, we notice that the age groups are not classified evenly. Namely, the age groups are '<18', '18-24', '25-44', '45-64', and '65+', where the range of group '18-24' is only 6, while others' ranges are 19. However, the number of arrests in the age group of '18-24' is extremely large compared to other age groups. It is worth paying attention to and explicitly exploring that remarkable number in plots. Thus, we keep the categories of age unchanged. Therefore, our dataset is in a tidy form to do exploratory data analysis in R now.
-
-
