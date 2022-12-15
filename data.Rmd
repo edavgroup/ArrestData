@@ -68,3 +68,52 @@ The left-bottom bar chart shows the total number of missing values in each colum
     
 Notice the relation among pd_cd, pd_desc and ky_cd, it is easy to understand the consistency of missing value. Since the Keycode is a more general category, if the Key code of an arrest event is unknown, the PD code also remains unknown. Similarly, if the PD code is unkown, we cannot describe it. 
 
+### Missing borough analysis:
+
+
+```{r}
+missing_data <- data
+missing_data["arrest_boro"][missing_data["arrest_boro"] == "Q"] <- "Queens"
+missing_data["arrest_boro"][missing_data["arrest_boro"] == "B"] <- "Bronx"
+missing_data["arrest_boro"][missing_data["arrest_boro"] == "S"] <- "Staten Island"
+missing_data["arrest_boro"][missing_data["arrest_boro"] == "K"] <- "Brooklyn"
+missing_data["arrest_boro"][missing_data["arrest_boro"] == "M"] <- "Manhattan"
+
+gg_miss_var(missing_data,
+            facet = arrest_boro
+            ) +
+  labs(x = "Column", title = "Missing values in different region")+
+  theme_bw()
+
+```
+
+When faceted on borough, we were surprised to find that majority of missing values are derived from Queens.It is probably due to data filing errors in this region, or the peculiarities of some crimes. We wonder if these arrest belongs to same accident or have some relation.
+
+```{r}
+queens_data <- missing_data %>%
+  filter(arrest_boro == "Queens") %>%
+  filter(is.na(ky_cd))
+
+ggplot(queens_data, aes(x=arrest_date)) +
+  ggtitle("Missing value for Queens in 2022") +
+  geom_histogram(color = "blue", fill = "lightBlue") +
+  labs(x= "Month(2022)", y = "# missing value") +
+  theme_bw()
+```
+
+
+We can propose a hypothesis from the charts above: Arrest data loss occurs throughout the year. There is no peak or obvious pattern, thus missing value is not due to specific incidents or periods, but it is highly likely because of the relatively poor system for arrest categorization in Queens.
+
+### Way to deal with the missing value
+
+```{r}
+options(scipen = 9)
+vis_miss(data,warn_large_data=FALSE)+
+  labs(y = "rows",title = "Missing data overview")+
+  theme(axis.text.x = element_text(angle=90))
+  
+```
+
+
+Since we cannot induce the classification of the arrest from known data, and all missing data only account for a small part of the total data (0.27%), we decided to delete these data directly, which will not affect our follow-up data analysis.
+
