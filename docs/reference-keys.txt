@@ -2,7 +2,6 @@ introduction
 proposal
 research-topic
 data-availability
-section
 data
 sources
 cleaning-transformation
