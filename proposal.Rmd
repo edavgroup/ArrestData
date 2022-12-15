@@ -10,14 +10,6 @@ We will mainly explore the arrest record data in New York City during the curren
 
 The dataset is categorized as public safety and contains 141,000 observations with 19 columns in a structured form. Each row represents an arrest effected in New York City by NYPD. The column shows the basic information about the arrest, including the time, location, and level of offense. At the same time, the dataset also contains descriptions of perpetrators, such as gender, age, race, etc. Based on these data, we can well accomplish our research goals.
 
-We can export the datasets in CSV format for offline use from New York OpenData. Then we can import and manipulate the CSV formatted data in R from the local path.
-
-
-
-
-
-
-####
 Meanwhile, we will also compare the current year's arrest information with the past to get the changes in the crime rate in New York City in recent years. We obtain the historic data from the same platform New York OpenData  (https://data.cityofnewyork.us/Public-Safety/NYPD-Arrests-Data-Historic-/8h9b-rp9u). This dataset has the same format as year-to-date data, making it easy to compare with each other. The historic dataset is last updated on June 9, 2022.
 
 We can export these two datasets in CSV format for offline use from New York OpenData. Then we can import and manipulate the CSV formatted data in R from the local path.
