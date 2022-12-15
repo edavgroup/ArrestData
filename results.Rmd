@@ -14,6 +14,7 @@ library(naniar)
 library(rvest)
 library(ggpubr)
 library(ggalluvial)
+library(RColorBrewer)
 ```
 
 
@@ -65,15 +66,42 @@ Such data can help police better understand the psychology of criminal groups.
 
 So there is another question: What is the connection between these crime figures and the specific types of crime correspondingly?
 
-Here we made an mosaic diagram to show that.
+Firstly, we calculate the frequency of all crime types as shown in table below.
 
+```{r}
+cat_nyc <- select(data, ofns_desc)
 
+crime_category_table <- table(cat_nyc$ofns_desc)
+crime_category_table <- sort(crime_category_table, decreasing = TRUE)
+
+crime_by_category <- as.data.frame(crime_category_table, stringsAsFactors = FALSE)
+colnames(crime_by_category) <- c("Category", "Frequency")
+crime_by_category$Percentage <- crime_by_category$Frequency / sum(crime_by_category$Frequency) * 100
+crime_by_category
+```
+We can see that there are 64 types in total. To have a clear understanding of the data, we select 7 types whose percentage is higher than 5% among the total observations for the further analysis.
+
+They are [ASSAULT 3 & RELATED OFFENSES, PETIT LARCENY, FELONY ASSAULT, MISCELLANEOUS PENAL LAW, CRIMINAL MISCHIEF & RELATED OF, DANGEROUS DRUGS, ROBBERY].
+
+```{r}
+# for bed = 2
+high_freq_crime_types <- data %>% filter((ofns_desc == "ASSAULT 3 & RELATED OFFENSES") | (ofns_desc == "PETIT LARCENY") | (ofns_desc == "FELONY ASSAULT") | (ofns_desc == "MISCELLANEOUS PENAL LAW") | (ofns_desc == "CRIMINAL MISCHIEF & RELATED OF") | (ofns_desc == "DANGEROUS DRUGS") | (ofns_desc == "ROBBERY") )
+
+high_freq_crime_types
+
+```
+
+Here we made an mosaic diagram to show the relationship between the criminals and the crime types.
 
 ```{r}
 library(ggmosaic)
 library(vcd)
-df_type <- select(data,c(age_group, perp_sex, ofns_desc))
-color=c("#796B69","#95BDCC","#E7B800")
-vcd::mosaic(ofns_desc~age_group+perp_sex,df_type,direction=c('v','h','h'),highlighting_fill=color)
+df_type <- select(high_freq_crime_types,c(age_group, perp_sex, ofns_desc))
+color= brewer.pal(7,"Blues")
+vcd::mosaic(ofns_desc~age_group+perp_sex,df_type,direction=c('v','h','v'),highlighting_fill=color, labeling = vcd::labeling_border(rot_labels = c(0, 0, 0, 0), abbreviate_labs = c(5, 1, 1,1)))
+```
+```{r}
+ggplot(data = high_freq_crime_types) +
+   geom_mosaic(aes(x = product(perp_sex, perp_race), fill=ofns_desc), na.rm=TRUE) +  labs(x = "Crime Types ", ) + facet_grid(age_group~.)
 ```
 
