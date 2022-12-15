@@ -33,8 +33,7 @@ library(lubridate)
 
 We start to analyze the crime pattern with plotting the criminals' portrait.
 
-With the arrest records, we plot the basic information (age, gender and race) for all arrestees. Then we could depicting the portraits for those criminal group.
-
+With the arrest records, we plot the basic information namely age, gender and race for all perpetrators by histograms.
 
 ```{r}
 data =  read.socrata("https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc")
@@ -72,11 +71,7 @@ figure3 <- ggplot(data, aes(x=perp_race))+
 figure3
 ```
 
-From the above three figures, we can observe the following characteristics of the captured criminals：
-1. Men dominate.
-2. The age group shows an approximate natural distribution pattern, mainly concentrated in 25-44 years old.
-3. Black and White Hispanic mainly.
-Such data can help police better understand the psychology of criminal groups.
+From the above three figures, we can observe the following characteristics of the captured criminals. First, the number of male perpetrators are highly greater than the number of female perpetrators. Even though the age group, as we mentioned in section 3.2 cleaning and transformation, is not evenly classified, the histogram of the distribution of age among perpetrators shows that the age of perpetrators is mainly concentrated in 25-44 years old. Beside, it is worth to notice that there are a remarkable amount of perpetrators only in their 18-24 years old. In addition, regarding the race distribution of perpetrators, the Black group and White Hispanic group are the two major group of perpetrators. These data and observations are useful to understand the demographics and biometrics of  perpetrators, and potentially helpful for NYPD and related researches on crimes in NYC.
 
 ### Relationship between sex, race and age
 
@@ -102,14 +97,14 @@ ggplot(data = race_data) +
 
 ```
 
-From the mosaic plot above, we can see the age, gender, and race distribution of arrested people. Overall, males make up the vast majority of all arrests. For age, the arrest rate of 25-44 is the highest among all age groups, followed by 18-24 and 45-60. With the weakening of activity, the arrest rate also decreases. For race, black and white Hispanics are the two main arrest groups, black and white Hispanics are the two main groups of arrests, and the least arrested races are American Indian and Alaskan natives, which are categorized into "Others".
+From the mosaic plot above, we can see the age, gender, and race distribution of arrested people. Overall, males are the vast majority of all arrests. For age, the arrest rate of 25-44 is the highest among all age groups, followed by 18-24 and 45-60. With the weakening of activity, the arrest rate also decreases. For race, black and white Hispanics are the two main arrest groups, and the least arrested races are American Indian and Alaskan natives, which are categorized into "Others". Also, there is no strong pattern among age, race, and gender.
 
 
 So there is another question: What is the connection between these criminals' figures and the specific types of crime correspondingly?
 
 ## Crime Types
 
-Firstly, we calculate the frequency of all crime types as shown in table below.
+First, we calculate the frequency of all crime types as shown in table below.
 
 ```{r}
 cat_nyc <- select(data, ofns_desc)
@@ -123,7 +118,7 @@ crime_by_category$Percentage <- crime_by_category$Frequency / sum(crime_by_categ
 crime_by_category 
 ```
 
-We can see that there are 64 types in total. To have a clear understanding of the data, we select 7 types whose percentage is higher than 5% among the total observations for the further analysis.
+We can see that there are 64 types of crimes in total. To have a clear and better understanding of the dataset, we select seven types of crimes which percentage is higher than 5% among the total observations for the further analysis. Then we can have a more explicit and concise plot to present the dataset. Otherwise, there would be a lot of chunks of data which is not very critical or meaningful on the plots.
 
 They are [ASSAULT 3 & RELATED OFFENSES, PETIT LARCENY, FELONY ASSAULT, MISCELLANEOUS PENAL LAW, CRIMINAL MISCHIEF & RELATED OF, DANGEROUS DRUGS, ROBBERY].
 
@@ -151,7 +146,7 @@ vcd::mosaic(ofns_desc~age_group+perp_sex,df_type,direction=c('v','h','h'),highli
       theme(axis.text.y=element_text(size=6), axis.text.x=element_text(size=4))
 ```
 
-Here we can see that the distribution of different crime types is similar in different age groups and sex offenders. So there's not a strong connection between the type of crime and the type of offenders.
+Here we can see that the distribution of different crime types is similar in different age groups and sex offenders. No pattern is observed from the mosaic graph. So there is no a strong assocation between the types of crime and the types of offenders.
 
 
 
@@ -159,9 +154,9 @@ Based on the analysis above, we can infer that there is a certain randomness bet
 
 ## Spacial Analysis
 
-We're reminded that different parts of New York have different policing environments, different police forces, different people who live there. 
+As we know, neighborhoods in New York are highly different among each other. Specifically, different regions in New York have highly various environments, house pricing, policing environments, different police forces, different people who live there. 
 
-In this section, we explore the arrest distribution look on map.
+In this section, we look at the distribution of the number of arrests on map.
 
 ```{r}
 missing_data <- data
@@ -234,7 +229,8 @@ plot_grid(map1,map2,map3,map4,map5, labels = NULL, ncol = 3)
 
 ```
 
-From the figure above, we can find that arrest happend in Manhattan, Bronx and Brooklyn is relatively concentrated. For Queens and Staten Island, there are places that never have an arrest during the whole year.
+From the figure above, we can observe that arrests which happened in Manhattan, Bronx and Brooklyn are relatively concentrated.In other words, in general, the crimes are possibly happened in any area in Manhattan, Bronx and Brooklyn. We could not say there is a certain region much safer than others in Manhattan, Bronx and Brooklyn. 
+On Queens and Staten Island, the graphs indicate that there are some places that never have an arrest during the this current year.
 
 ```{r}
 map_data %>%
@@ -248,7 +244,7 @@ map_data %>%
   theme()
 ```
 
-It turns out that the number of arrests occurred in Staten Island is the least, which is about 1/3 of that in other borough.
+By the bar plot of the number of arrests based on the borough of NYC, it turns out that the number of arrests occurred in Staten Island is the least consistent with the observation from the map graphs, which is about 1/3 of that in other borough.
 
 
 ```{r}
@@ -257,14 +253,14 @@ figure_boro <- ggplot(high_freq_crime_types,
                       fill=ofns_desc))+
   geom_histogram(stat="count",position="identity", bins = 100, alpha=0.5)+
   facet_grid(ofns_desc ~ .)+
-  labs(caption="Figure.4 Increase in salary by performance rating",
-       x="percentage change in salary", y = "count")+
+  labs(caption="Figure.4 Types of Crimes by the Borough",
+       x="Borough in NYC", y = "count")+
   theme_minimal()
 
 figure_boro
 ```
 
-
+This bar plot compares the number of various types of arrests based on the different boroughs of NYC. It is worth to notice that the number of Petit Larceny is relatively high in Manhattan compared to other types of crimes in NYC and the number of Petit Larceny in other boroughs. In general, there is no strong pattern between the types of crimes and the boroughs of the crimes, which are evenly distributed with proportions to their total number of crimes in boroughs.
 
 ## Temporal Analysis
 
