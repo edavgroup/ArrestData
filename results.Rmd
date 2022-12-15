@@ -113,12 +113,15 @@ vcd::mosaic(ofns_desc~age_group+perp_sex,df_type,direction=c('h','v','v'),highli
 
 Here we can see that the distribution of different crime types is similar in different age groups and sex offenders. So there's not a strong connection between the type of crime and the type of offenders.
 
+
 ### Relationship between Locations and Crime Types
 
 
 
-### Relationship between Time and Crime Types
 
 
+## Crime Rate
+### For different Region
 
+### Historical Crime Rates
 
