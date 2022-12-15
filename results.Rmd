@@ -15,6 +15,11 @@ library(rvest)
 library(ggpubr)
 library(ggalluvial)
 library(RColorBrewer)
+library(choroplethr)
+library(ggmap)
+library(tmap)
+library(scales)
+library(cowplot)
 ```
 
 ## Criminals' portrait
@@ -30,14 +35,14 @@ data <- data %>%
   drop_na(pd_desc, ky_cd, pd_cd)
 
 figure1 <- ggplot(data, aes(x=age_group))+ 
-  geom_histogram(stat="count",position="identity", alpha=0.5, fill = "lightBlue")+
+  geom_histogram(stat="count",position="identity", alpha=0.5, fill = "#dea32c")+
   coord_flip()+
   labs(caption="Figure.1 Age Distribution of the Criminals", 
        x="age", y="count")+ 
   theme(axis.text.y=element_text(size=8), axis.text.x=element_text(size=8))
 
 figure2 <- ggplot(data, aes(x=perp_sex))+ 
-  geom_histogram(stat="count",position="identity", alpha=0.5,fill = "lightBlue")+
+  geom_histogram(stat="count",position="identity", alpha=0.5,fill = "#dea32c")+
   coord_flip()+
   labs(caption="Figure.2 Sex Distribution of the Criminals", 
        x="sex", y="count")+ 
@@ -49,7 +54,7 @@ ggarrange(figure1, figure2, ncol = 2, nrow = 1)
 
 ```{r}
 figure3 <- ggplot(data, aes(x=perp_race))+ 
-  geom_histogram(stat="count",position="identity", alpha=0.5,fill = "lightBlue")+
+  geom_histogram(stat="count",position="identity", alpha=0.5,fill = "#dea32c")+
   coord_flip()+
   labs(caption="Figure.3 Race Distribution of the Criminals", 
        x="race", y="count")+ 
@@ -68,7 +73,6 @@ Such data can help police better understand the psychology of criminal groups.
 So there is another question: What is the connection between these crime figures and the specific types of crime correspondingly?
 
 ## Crime Types
-### Relationship between Type of Offenders and Crime Types
 
 Firstly, we calculate the frequency of all crime types as shown in table below.
 
@@ -91,7 +95,7 @@ They are [ASSAULT 3 & RELATED OFFENSES, PETIT LARCENY, FELONY ASSAULT, MISCELLAN
 ```{r}
 high_freq_crime_types <- data %>% filter((ofns_desc == "ASSAULT 3 & RELATED OFFENSES") | (ofns_desc == "PETIT LARCENY") | (ofns_desc == "FELONY ASSAULT") | (ofns_desc == "MISCELLANEOUS PENAL LAW") | (ofns_desc == "CRIMINAL MISCHIEF & RELATED OF") | (ofns_desc == "DANGEROUS DRUGS") | (ofns_desc == "ROBBERY") )
 
-crime_by_category_plot <-ggplot(crime_by_category[1:7,], aes(x = Category, y = Frequency)) +     geom_histogram(stat="identity",alpha=0.5,fill = "lightBlue") + 
+crime_by_category_plot <-ggplot(crime_by_category[1:7,], aes(x = Category, y = Frequency)) +     geom_histogram(stat="identity",alpha=0.5,fill = "#dea32c") + 
         labs(title = 'Crime by Category',
          x = 'Category',
          y = 'Frequency')+
@@ -107,21 +111,128 @@ Here we made an mosaic diagram to show the relationship between the criminals an
 library(ggmosaic)
 library(vcd)
 df_type <- select(high_freq_crime_types,c(age_group, perp_sex, ofns_desc))
-color= brewer.pal(7,"Greys")
+color= brewer.pal(7,"Reds")
 vcd::mosaic(ofns_desc~age_group+perp_sex,df_type,direction=c('h','v','v'),highlighting_fill=color, labeling = vcd::labeling_border(rot_labels = c(0, 0, 90, 90), abbreviate_labs = c(5, 1, 1)))
 ```
 
 Here we can see that the distribution of different crime types is similar in different age groups and sex offenders. So there's not a strong connection between the type of crime and the type of offenders.
 
+Based on the analysis above, we can infer that there is a certain randomness between the crime rate and crime types. Therefore, the next question would be: are there any factors that are more strongly associated with crime rate in New York?
 
-### Relationship between Locations and Crime Types
+## Crimes Over different Boroughs
+
+We're reminded that different parts of New York have different policing environments, different police forces, different people who live there. So we regionalized criminal records.
+
+### Arrest data look on map
+
+In this section, we explore the arrest distribution look on map.
+
+```{r}
+missing_data <- data
+missing_data["pd_desc"][missing_data["pd_desc"] == "(null)"] <- NA
+missing_data["arrest_boro"][missing_data["arrest_boro"] == "Q"] <- "Queens"
+missing_data["arrest_boro"][missing_data["arrest_boro"] == "B"] <- "Bronx"
+missing_data["arrest_boro"][missing_data["arrest_boro"] == "S"] <- "Staten Island"
+missing_data["arrest_boro"][missing_data["arrest_boro"] == "K"] <- "Brooklyn"
+missing_data["arrest_boro"][missing_data["arrest_boro"] == "M"] <- "Manhattan"
+
+map_data <- missing_data %>%
+  filter(!is.na(ky_cd))
+
+```
 
 
+```{r}
+
+map_queen <- map_data %>%
+  filter(arrest_boro == "Queens")
+
+map_bronx <- map_data %>%
+  filter(arrest_boro == "Bronx")
+
+map_si <- map_data %>%
+  filter(arrest_boro == "Staten Island")
+
+map_brooklyn <- map_data %>%
+  filter(arrest_boro == "Brooklyn")
+
+map_manhattan <- map_data %>%
+  filter(arrest_boro == "Manhattan")
+
+ny_map <- get_stamenmap(bbox = c(left = -74.2591, bottom = 40.4774, 
+                                 right = -73.7002, top = 40.9162),
+                        zoom = 10, maptype = "terrain",
+                        color = c("color", "bw"))
+
+map1 <- ggmap(ny_map) +
+  geom_point(data = map_queen, aes(x=longitude, y = latitude),
+             size=0.1,color='#b3424a', alpha = 0.1) +
+  labs(x = "Longitude", y = "Latitude", title = "Queens") + 
+  theme_bw()
+
+map2 <- ggmap(ny_map) +
+  geom_point(data = map_bronx, aes(x=longitude, y = latitude),
+             size=0.1,color='#b3424a', alpha = 0.1) +
+  labs(x = "Longitude", y = "Latitude", title = "Bronx") + 
+  theme_bw()
+
+map3 <- ggmap(ny_map) +
+  geom_point(data = map_si, aes(x=longitude, y = latitude),
+             size=0.1,color='#b3424a', alpha = 0.1) +
+  labs(x = "Longitude", y = "Latitude", title = "Staten Island") + 
+  theme_bw()
+
+map4 <- ggmap(ny_map) +
+  geom_point(data = map_brooklyn, aes(x=longitude, y = latitude),
+             size=0.1,color='#b3424a', alpha = 0.1) +
+  labs(x = "Longitude", y = "Latitude", title = "Brooklyn") + 
+  theme_bw()
+
+map5 <- ggmap(ny_map) +
+  geom_point(data = map_manhattan, aes(x=longitude, y = latitude),
+             size=0.1,color='#b3424a', alpha = 0.1) +
+  labs(x = "Longitude", y = "Latitude", title = "Manhattan") + 
+  theme_bw()
+
+plot_grid(map1,map2,map3,map4,map5, labels = NULL, ncol = 3)
+
+```
+
+From the figure above, we can find that arrest happend in Manhattan, Bronx and Brooklyn is relatively concentrated. For Queens and Staten Island, there are places that never have an arrest during the whole year.
+
+```{r}
+map_data %>%
+  mutate(Freq = 1) %>%
+  group_by(arrest_boro) %>%
+  summarise(freq = sum(Freq)) %>%
+  ggplot(aes(x=fct_reorder(arrest_boro,freq,.desc = TRUE),y=freq)) +
+  geom_bar(stat = "identity",alpha=0.5,fill = "#dea32c", color = "black", alpha = 0.8) +
+  geom_text(aes(label=freq), size=3.5, vjust=1.6)+
+  labs(title = "Borough-wise arrest in New York in 2022" , x="", y="Number of Arrest") +
+  theme()
+```
+
+It turns out that the number of arrests occurred in Staten Island is the least, which is about 1/3 of that in other borough.
 
 
+## Crimes Over Time
 
-## Crime Rate
-### For different Region
+We want to explore if there is any pattern over time by plotting the number of arrest over time.
 
-### Historical Crime Rates
+```{r}
+df_arrest_daily <- data %>%
+  mutate(Date = as.Date(arrest_date, "%Y/%m/%d")) %>%
+  group_by(Date) %>%
+  summarize(count = n()) %>%
+  arrange(Date)
 
+plot <- ggplot(df_arrest_daily, aes(x = Date, y = count)) +
+  geom_line(color = "#F2CA27", size = 0.5) +
+  geom_smooth(color = "#1A1A1A") +
+  # fte_theme() +
+  scale_x_date(breaks = date_breaks("1 month"), labels = date_format("%m")) +
+  labs(x = "Date of Arrest", y = "# of Arrests", title = "Daily Arrests from 01/01/2022 to 9/30/2022")
+plot
+```
+
+This figure shows the number of daily arrests from January 1 2022, to September 30 2022. We can see there is no strong pattern over time. Nevertheless, there is a small increasing during the beginning of 2022 and a slight decreasing around July and August.
