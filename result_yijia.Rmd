@@ -14,6 +14,7 @@ library(ggalluvial)
 library(choroplethr)
 library(ggmap)
 library(tmap)
+library(scales)
 ```
 
 ```{r}
@@ -23,6 +24,7 @@ data = data %>% select(-c(geocoded_column))
 
 We want to investigate the number of arrest in NYC by NYPDs based on the borough of the arrest.
 
+
 ```{r}
 crime_by_borough_plot = ggplot(data, aes(x = fct_infreq(arrest_boro))) +
   geom_bar(stat="count", color = "grey", fill = "lightBlue", 
@@ -31,4 +33,23 @@ crime_by_borough_plot = ggplot(data, aes(x = fct_infreq(arrest_boro))) +
        x="borough", y="count")
 crime_by_borough_plot
 ```
+
+We want to explore if there is any pattern over time by plotting the number of arrest over time.
+
+```{r}
+df_arrest_daily <- data %>%
+  mutate(Date = as.Date(arrest_date, "%Y/%m/%d")) %>%
+  group_by(Date) %>%
+  summarize(count = n()) %>%
+  arrange(Date)
+
+plot <- ggplot(df_arrest_daily, aes(x = Date, y = count)) +
+  geom_line(color = "#F2CA27", size = 0.5) +
+  geom_smooth(color = "#1A1A1A") +
+  # fte_theme() +
+  scale_x_date(breaks = date_breaks("1 month"), labels = date_format("%m")) +
+  labs(x = "Date of Arrest", y = "# of Arrests", title = "Daily Arrests from 01/01/2022 to 9/30/2022")
+plot
+```
+This figure shows the number of daily arrests from January 1 2022, to September 30 2022. We can see there is no strong pattern over time. Nevertheless, there is a small increasing during the beginning of 2022 and a slight decreasing around July and August.
 
