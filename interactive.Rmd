@@ -3,3 +3,5 @@
 To exhibit the temporal changes of the number of crime records, we use d3 to plot interactive graphes, click the link to see: [ https://vizhub.com/Jasper129/0a616861f1124b41be3d3ea79f82744c ]
 
 In the webpage, there are buttons at the top of the page that list January through September. By clicking the corresponding button, we can see the number of crimes recorded each day of that month, which offers us a easy way to find the seasonal trends or temporal pattern of crime in New York City.
+
+With the interactive histogram of the monthly number of arrests over time, there is a weekly pattern each month, which is consistent with the observation from the heatmap among the months, the day of the week, and the number of crimes. When it comes to the limitations of our exploration of arrest records in NYC this year, we only use the interactive histogram plots to show the daily number of arrests each month.
