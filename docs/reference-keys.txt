@@ -12,5 +12,10 @@ missing-pattern
 missing-borough-analysis
 way-to-deal-with-the-missing-value
 results
+criminals-portrait
+crime-types
+crimes-over-different-boroughs
+arrest-data-look-on-map
+crimes-over-time
 interactive-component
 conclusion
