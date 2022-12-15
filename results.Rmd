@@ -98,8 +98,11 @@ library(ggmosaic)
 library(vcd)
 df_type <- select(high_freq_crime_types,c(age_group, perp_sex, ofns_desc))
 color= brewer.pal(7,"Blues")
-vcd::mosaic(ofns_desc~age_group+perp_sex,df_type,direction=c('v','h','v'),highlighting_fill=color, labeling = vcd::labeling_border(rot_labels = c(0, 0, 0, 0), abbreviate_labs = c(5, 1, 1,1)))
+vcd::mosaic(ofns_desc~age_group+perp_sex,df_type,direction=c('h','v','v'),highlighting_fill=color, labeling = vcd::labeling_border(rot_labels = c(0, 0, 90, 90), abbreviate_labs = c(5, 1, 1)))
 ```
+
+Here we can see that the distribution of different crime types
+
 ```{r}
 ggplot(data = high_freq_crime_types) +
    geom_mosaic(aes(x = product(perp_sex, perp_race), fill=ofns_desc), na.rm=TRUE) +  labs(x = "Crime Types ", ) + facet_grid(age_group~.)
