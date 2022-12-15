@@ -33,7 +33,9 @@ With the arrest records, we plot the basic information (age, gender and race) fo
 data =  read.socrata("https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc")
 data <- data %>%
   drop_na(pd_desc, ky_cd, pd_cd)
+```
 
+```{r}
 figure1 <- ggplot(data, aes(x=age_group))+ 
   geom_histogram(stat="count",position="identity", alpha=0.5, fill = "#dea32c")+
   coord_flip()+
@@ -117,6 +119,9 @@ vcd::mosaic(ofns_desc~age_group+perp_sex,df_type,direction=c('v','h','h'),highli
 ```
 
 Here we can see that the distribution of different crime types is similar in different age groups and sex offenders. So there's not a strong connection between the type of crime and the type of offenders.
+
+
+
 
 Based on the analysis above, we can infer that there is a certain randomness between the crime rate and crime types. Therefore, the next question would be: are there any factors that are more strongly associated with crime rate in New York?
 
@@ -214,6 +219,20 @@ map_data %>%
 ```
 
 It turns out that the number of arrests occurred in Staten Island is the least, which is about 1/3 of that in other borough.
+
+
+```{r}
+figure_boro <- ggplot(high_freq_crime_types, 
+                  aes(x=arrest_boro,color=ofns_desc, 
+                      fill=ofns_desc))+
+  geom_histogram(stat="count",position="identity", bins = 100, alpha=0.5)+
+  facet_grid(ofns_desc ~ .)+
+  labs(caption="Figure.4 Increase in salary by performance rating",
+       x="percentage change in salary", y = "count")+
+  theme_minimal()
+
+figure_boro
+```
 
 ### Crimes over sex, race and age
 
