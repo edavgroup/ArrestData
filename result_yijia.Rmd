@@ -1,7 +1,34 @@
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-library(RSocrata)
+library(dplyr)
+library(tibble)
+library(tidyr)
 library(ggplot2)
-library(tidyverse)
+library(forcats)
+library(RSocrata)
+library(UpSetR)
+library(naniar)
+library(rvest)
+library(ggpubr)
+library(ggalluvial)
+library(choroplethr)
+library(ggmap)
+library(tmap)
+```
+
+```{r}
+data =  read.socrata("https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc")
+data = data %>% select(-c(geocoded_column))
+```
+
+We want to investigate the number of arrest in NYC by NYPDs based on the borough of the arrest.
+
+```{r}
+crime_by_borough_plot = ggplot(data, aes(x = fct_infreq(arrest_boro))) +
+  geom_bar(stat="count", color = "grey", fill = "lightBlue", 
+                 binwidth = 5, center = 52.5) +
+  labs(caption="Crime  by Borough", 
+       x="borough", y="count")
+crime_by_borough_plot
 ```
 
