@@ -152,9 +152,7 @@ Based on the analysis above, we can infer that there is a certain randomness bet
 
 ## Spacial Analysis
 
-We're reminded that different parts of New York have different policing environments, different police forces, different people who live there. So we regionalized criminal records.
-
-### Arrest data look on map
+We're reminded that different parts of New York have different policing environments, different police forces, different people who live there. 
 
 In this section, we explore the arrest distribution look on map.
 
