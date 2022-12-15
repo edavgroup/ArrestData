@@ -40,7 +40,7 @@ str(data)
 
 ### Why analyse missing value?
 
-In this section, we want to know the distribution of missing values in the original dataset. Through missing pattern analysis, we are able to get an overview of the missing logic and determine how to deal with these missing values. Whether to delete them directly or to approach them based on other non-missing values?
+In this section, we want to know the distribution of missing values in the original dataset. Through missing pattern analysis, we are able to get an overview of the missing logic and determine how to deal with these missing values. For example, Whether delete them directly or to approach them based on other non-missing values?
 
 ### Missing pattern
 
@@ -82,6 +82,33 @@ gg_miss_var(missing_data,
 
 ```
 
+When faceted on borough, we were surprised to find that majority of missing values are derived from Queens.It is probably due to data filing errors in this region, or the peculiarities of some crimes. We wonder if these arrest belongs to same accident or have some relation.
+
+```{r}
+queens_data <- missing_data %>%
+  filter(arrest_boro == "Queens") %>%
+  filter(is.na(ky_cd))
+
+ggplot(queens_data, aes(x=arrest_date)) +
+  ggtitle("Missing value for Queens in 2022") +
+  geom_histogram(color = "blue", fill = "lightBlue") +
+  labs(x= "Month(2022)", y = "# missing value") +
+  theme_bw()
+```
 
 
+We can propose a hypothesis from the charts above: Arrest data loss occurs throughout the year. There is no peak or obvious pattern, thus missing value is not due to specific incidents or periods, but it is highly likely because of the relatively poor system for arrest categorization in Queens.
+
+### Way to deal with the missing value
+
+```{r}
+options(scipen = 9)
+vis_miss(data,warn_large_data=FALSE)+
+  labs(y = "rows",title = "Missing data overview")+
+  theme(axis.text.x = element_text(angle=90))
+  
+```
+
+
+Since we cannot induce the classification of the arrest from known data, and all missing data only account for a small part of the total data (0.27%), we decided to delete these data directly, which will not affect our follow-up data analysis.
 
